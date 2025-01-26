@@ -104,9 +104,3 @@ stages:
               appType: 'webApp'
               appName: 'YourMVCAppName'
               package: '$(System.DefaultWorkingDirectory)/**/*.zip'
-
-    # Approbation avant déploiement en Production
-    approval:
-      timeoutInMinutes: 60
-      reviewers:
-        - your-azure-ad-user-or-group

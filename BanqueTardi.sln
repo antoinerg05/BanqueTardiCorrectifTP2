@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanqueTardi.MVC", "BanqueTardi\BanqueTardi.MVC.csproj", "{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B7BB483A-AD03-4C70-8D69-7ABD4654D621}
+	EndGlobalSection
+EndGlobal

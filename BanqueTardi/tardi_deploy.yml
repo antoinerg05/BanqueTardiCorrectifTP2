@@ -1,0 +1,112 @@
+trigger:
+  branches:
+    include:
+      - main # Déclenche le pipeline uniquement sur la branche principale.
+
+variables:
+  serviceConnection : 'SC-TP3'
+  resourceGroupName: 'rg-tp3-devops'
+  location: 'canadacentral'
+  webAppName: 'webapp-tp3'
+  webAppNameProd : 'webapp-tp3'
+  sku: 'TP3'
+
+stages:
+  - stage: Build
+    displayName: "Build Stage"
+    jobs:
+      - job: BuildAPI
+        displayName: "Build APIs"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Build APIs"
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+
+      - job: BuildMVC
+        displayName: "Build MVC Application"
+        pool:
+          vmImage: 'windows-latest'
+        dependsOn: BuildAPI
+        condition: succeeded()
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Build MVC Application"
+            inputs:
+              command: 'build'
+              projects: '**/*.csproj'
+
+  - stage: DeployDev
+    displayName: "Deploy to Development"
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: DeployAPItoDev
+        displayName: "Deploy APIs to Dev"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy APIs to Azure Dev"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'YourAPIAppName'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+      - job: DeployMVCtoDev
+        displayName: "Deploy MVC to Dev"
+        dependsOn: DeployAPItoDev
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy MVC to Azure Dev"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'YourMVCAppName'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+  - stage: DeployProd
+    displayName: "Deploy to Production"
+    dependsOn: DeployDev
+    condition: succeeded()
+    jobs:
+      - job: DeployAPItoProd
+        displayName: "Deploy APIs to Prod"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy APIs to Azure Prod"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'YourAPIAppName'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+      - job: DeployMVCtoProd
+        displayName: "Deploy MVC to Prod"
+        dependsOn: DeployAPItoProd
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy MVC to Azure Prod"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'YourMVCAppName'
+              package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+    # Approbation avant déploiement en Production
+    approval:
+      timeoutInMinutes: 60
+      reviewers:
+        - your-azure-ad-user-or-group

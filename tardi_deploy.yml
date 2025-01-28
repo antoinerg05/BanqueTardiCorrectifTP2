@@ -25,6 +25,7 @@ stages:
             inputs:
               command: 'build'
               projects: 'CalculInterets.API/**/*.csproj'
+              arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/CalculInterets.API'
 
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Interet API"

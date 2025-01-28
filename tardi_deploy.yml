@@ -51,16 +51,15 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Assurance API"
             inputs:
-              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/Assurances.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/Assurances.API.zip'
+              archiveFile: 'Assurances.API.zip'
               replaceExistingArchive: true
 
           - task: PublishPipelineArtifact@1
             displayName: "Publier l'artefact pour Assurance API"
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/Assurances.API.zip'
+              targetPath: 'Assurances.API.zip'
               artifact: 'Assurances.API'
 
           # Build Credit API
@@ -73,16 +72,15 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Credit API"
             inputs:
-              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/CarteDeCredit.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/CarteDeCredit.API.zip'
+              archiveFile: 'CarteDeCredit.API.zip'
               replaceExistingArchive: true
 
           - task: PublishPipelineArtifact@1
             displayName: "Publier l'artefact pour Credit API"
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/CarteDeCredit.API.zip'
+              targetPath: 'CarteDeCredit.API.zip'
               artifact: 'CarteDeCredit.API'
 
       - job: BuildMVC
@@ -101,16 +99,15 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour MVC Application"
             inputs:
-              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/BanqueTardi/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/BanqueTardi.zip'
+              archiveFile: 'BanqueTardi.zip'
               replaceExistingArchive: true
 
           - task: PublishPipelineArtifact@1
             displayName: "Publier l'artefact pour MVC Application"
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/BanqueTardi.zip'
+              targetPath: 'BanqueTardi.zip'
               artifact: 'BanqueTardi'
 
   - stage: DeployDev

@@ -38,6 +38,14 @@ builder.Services.AddHttpClient<ICarteCreditServices, CarteCreditServiceProxy>(cl
     client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("URLAPIs:CarteCreditAPI"));
 });
 
+builder.Services.AddSingleton<ServiceBusHelper>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    string connectionString = configuration["AzureServiceBus:ConnectionString"];
+    string queueName = configuration["AzureServiceBus:QueueName"];
+    return new ServiceBusHelper(connectionString, queueName);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

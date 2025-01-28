@@ -18,11 +18,14 @@ namespace BanqueTardi.Controllers
         private readonly ClientContext _context;
         private readonly List<string> TypeOperations = new() { "Débit", "Crédit" };
         private readonly IStorageServiceHelper _storageServiceHelper;
+        private readonly ServiceBusHelper _serviceBusHelper;
 
-        public OperationsController(ClientContext context, IStorageServiceHelper storageServiceHelper)
+
+        public OperationsController(ClientContext context, IStorageServiceHelper storageServiceHelper, ServiceBusHelper serviceBusHelper)
         {
             _context = context;
             _storageServiceHelper = storageServiceHelper;
+            _serviceBusHelper = serviceBusHelper;
         }
 
         // GET: Operation/Historique
@@ -103,6 +106,7 @@ namespace BanqueTardi.Controllers
                         _context.Add(decouvert);
                         string messageQueue = $"Découvert sur le compte bancaire {compte.CompteId}, du client {compte.Client.Nom} d'un montant {10m}$";
                         _storageServiceHelper.EnregistrerMessage(messageQueue, "queuedecouvert");
+                        await _serviceBusHelper.SendMessageAsync(messageQueue);
                     }
                     else if (operation.TypeCompteID != 10)
                     {

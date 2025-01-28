@@ -62,7 +62,7 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-apiinteret-dev'
+              appName: 'webapp-api-interet-dev'
               package: '$(System.DefaultWorkingDirectory)/CalculInterets.API/**/*.zip'
 
       - job: DeployAssuranceAPI
@@ -75,7 +75,7 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-assurance'
+              appName: 'webapp-api-assurance-dev'
               package: '$(System.DefaultWorkingDirectory)/Assurances.API/**/*.zip'
 
       - job: DeployCreditAPI
@@ -88,7 +88,7 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-credit'
+              appName: 'webapp-api-credit-dev'
               package: '$(System.DefaultWorkingDirectory)/CarteDeCredit.API/**/*.zip'
 
       - job: DeployMVCtoDev

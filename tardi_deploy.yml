@@ -27,13 +27,11 @@ stages:
             displayName: "Build API - Assurance"
             inputs:
               command: 'build'
-              arguments: "--verify-no-changes --verbosity diagnostic"
-              projects: 'Aussurances.API/**/*.csproj'
+              projects: 'Assurances.API/**/*.csproj'
           - task: DotNetCoreCLI@2
             displayName: "Build API - Credit"
             inputs:
               command: 'build'
-              arguments: "--verify-no-changes --verbosity diagnostic"
               projects: 'CarteDeCredit.API/**/*.csproj'
 
       - job: BuildMVC

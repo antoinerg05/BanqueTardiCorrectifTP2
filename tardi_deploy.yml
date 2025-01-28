@@ -22,17 +22,17 @@ stages:
             displayName: "Build API - Interet"
             inputs:
               command: 'build'
-              projects: 'api-interet/**/*.csproj'
+              projects: 'CalculInteret.API/**/*.csproj'
           - task: DotNetCoreCLI@2
             displayName: "Build API - Assurance"
             inputs:
               command: 'build'
-              projects: 'api-assurance/**/*.csproj'
+              projects: 'Aussurances.API/**/*.csproj'
           - task: DotNetCoreCLI@2
             displayName: "Build API - Credit"
             inputs:
               command: 'build'
-              projects: 'api-credit/**/*.csproj'
+              projects: 'CarteDeCredit.API/**/*.csproj'
 
       - job: BuildMVC
         displayName: "Build MVC Application"
@@ -45,7 +45,7 @@ stages:
             displayName: "Build MVC Application"
             inputs:
               command: 'build'
-              projects: 'webapp/**/*.csproj'
+              projects: 'BanqueTardi/**/*.csproj'
 
   - stage: DeployDev
     displayName: "Deploy to Development"

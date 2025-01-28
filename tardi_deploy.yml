@@ -30,7 +30,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Interet API"
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/CalculInterets.API/$(BuildConfiguration)'
+              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/CalculInterets.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/CalculInterets.API.zip'
@@ -52,7 +52,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Assurance API"
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/Assurances.API/$(BuildConfiguration)'
+              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/Assurances.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/Assurances.API.zip'
@@ -74,7 +74,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Credit API"
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/CarteDeCredit.API/$(BuildConfiguration)'
+              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/CarteDeCredit.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/CarteDeCredit.API.zip'
@@ -102,7 +102,7 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour MVC Application"
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/BanqueTardi/$(BuildConfiguration)'
+              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/BanqueTardi/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
               archiveFile: '$(Build.ArtifactStagingDirectory)/BanqueTardi.zip'

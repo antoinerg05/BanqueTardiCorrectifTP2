@@ -22,7 +22,7 @@ stages:
             displayName: "Build API - Interet"
             inputs:
               command: 'build'
-              projects: 'CalculInteret.API/**/*.csproj'
+              projects: 'CalculInterets.API/**/*.csproj'
           - task: DotNetCoreCLI@2
             displayName: "Build API - Assurance"
             inputs:

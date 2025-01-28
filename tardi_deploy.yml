@@ -193,5 +193,111 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-tp3'
+              appName: 'webapp-mvc-dev'
               package: '$(Pipeline.Workspace)/BanqueTardi.zip'
+
+# Stage 3: Deploy to Prod
+  - stage: DeployProd
+    displayName: "Deploy to Production"
+    dependsOn: DeployDev
+    condition: succeeded()
+    jobs:
+      - job: Approval
+        displayName: "Approval Stage"
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            inputs:
+              notifyUsers: '<email@example.com>'
+              instructions: |
+                Veuillez approuver le déploiement en Production.
+              timeout: '0'
+
+      - job: DeployInteretAPIProd
+        displayName: "Deploy API - Interet to Prod"
+        dependsOn: Approval
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Interet API"
+            inputs:
+              artifact: 'CalculInterets.API'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Interet"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-api-interet-prod'
+              package: '$(Pipeline.Workspace)/CalculInterets.API.zip'
+
+      - job: DeployAssuranceAPIProd
+        displayName: "Deploy API - Assurance to Prod"
+        dependsOn: Approval
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Assurance API"
+            inputs:
+              artifact: 'Assurances.API'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Assurance"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-api-assurance-prod'
+              package: '$(Pipeline.Workspace)/Assurances.API.zip'
+
+      - job: DeployCreditAPIProd
+        displayName: "Deploy API - Credit to Prod"
+        dependsOn: Approval
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Credit API"
+            inputs:
+              artifact: 'CarteDeCredit.API'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Credit"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-api-credit-prod'
+              package: '$(Pipeline.Workspace)/CarteDeCredit.API.zip'
+
+      - job: DeployMVCtoProd
+        displayName: "Deploy MVC to Prod"
+        dependsOn: 
+          - DeployInteretAPIProd
+          - DeployAssuranceAPIProd
+          - DeployCreditAPIProd
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour MVC Application"
+            inputs:
+              artifact: 'BanqueTardi'
+              path: '$(Pipeline.Workspace)'
+
+          - task: AzureWebApp@1
+            displayName: "Deploy MVC Application"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-mvc-prod'
+              package: '$(Pipeline.Workspace)/BanqueTardi.zip'
+
+

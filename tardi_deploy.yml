@@ -63,6 +63,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'api-interet'
+              arguments: "--verify-no-changes --verbosity diagnostic"
               package: '$(System.DefaultWorkingDirectory)/api-interet/**/*.zip'
 
       - job: DeployAssuranceAPI
@@ -76,6 +77,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'api-assurance'
+              arguments: "--verify-no-changes --verbosity diagnostic"
               package: '$(System.DefaultWorkingDirectory)/api-assurance/**/*.zip'
 
       - job: DeployCreditAPI
@@ -89,6 +91,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'api-credit'
+              arguments: "--verify-no-changes --verbosity diagnostic"
               package: '$(System.DefaultWorkingDirectory)/api-credit/**/*.zip'
 
       - job: DeployMVCtoDev
@@ -107,6 +110,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'webapp-tp3'
+              arguments: "--verify-no-changes --verbosity diagnostic"
               package: '$(System.DefaultWorkingDirectory)/webapp/**/*.zip'
 
   - stage: DeployProd

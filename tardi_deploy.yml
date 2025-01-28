@@ -62,8 +62,7 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-interet'
-              arguments: "--verify-no-changes --verbosity diagnostic"
+              appName: 'webapp-apiinteret-dev'
               package: '$(System.DefaultWorkingDirectory)/CalculInterets.API/**/*.zip'
 
       - job: DeployAssuranceAPI

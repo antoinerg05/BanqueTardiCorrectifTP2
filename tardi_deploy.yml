@@ -1,7 +1,7 @@
 trigger:
   branches:
     include:
-      - main # Déclenche le pipeline uniquement sur la branche principale.
+      - master # Déclenche le pipeline uniquement sur la branche principale.
 
 variables:
   serviceConnection: 'SC-TP3'

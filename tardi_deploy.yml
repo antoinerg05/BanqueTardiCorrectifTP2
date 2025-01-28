@@ -1,13 +1,14 @@
 trigger:
   branches:
     include:
-      - main # Déclenche le pipeline uniquement sur la branche principale.
+      - master # Déclenche le pipeline uniquement sur la branche principale.
 
 variables:
   serviceConnection: 'SC-TP3'
   resourceGroupName: 'rg-tp3-devops'
   location: 'canadacentral'
   sku: 'TP3'
+  BuildConfiguration: 'Release'
 
 stages:
   - stage: Build
@@ -18,21 +19,69 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
+          # Build Interet API
           - task: DotNetCoreCLI@2
             displayName: "Build API - Interet"
             inputs:
               command: 'build'
               projects: 'CalculInterets.API/**/*.csproj'
+              arguments: '-c Release -o $(Build.ArtifactStagingDirectory)/CalculInterets.API/Release'
+
+          - task: ArchiveFiles@2
+            displayName: "Créer le package ZIP pour Interet API"
+            inputs:
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: 'CalculInterets.API.zip'
+              replaceExistingArchive: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publier l'artefact pour Interet API"
+            inputs:
+              targetPath: 'CalculInterets.API.zip'
+              artifact: 'CalculInterets.API'
+
+          # Build Assurance API
           - task: DotNetCoreCLI@2
             displayName: "Build API - Assurance"
             inputs:
               command: 'build'
               projects: 'Assurances.API/**/*.csproj'
+
+          - task: ArchiveFiles@2
+            displayName: "Créer le package ZIP pour Assurance API"
+            inputs:
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: 'Assurances.API.zip'
+              replaceExistingArchive: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publier l'artefact pour Assurance API"
+            inputs:
+              targetPath: 'Assurances.API.zip'
+              artifact: 'Assurances.API'
+
+          # Build Credit API
           - task: DotNetCoreCLI@2
             displayName: "Build API - Credit"
             inputs:
               command: 'build'
               projects: 'CarteDeCredit.API/**/*.csproj'
+
+          - task: ArchiveFiles@2
+            displayName: "Créer le package ZIP pour Credit API"
+            inputs:
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: 'CarteDeCredit.API.zip'
+              replaceExistingArchive: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publier l'artefact pour Credit API"
+            inputs:
+              targetPath: 'CarteDeCredit.API.zip'
+              artifact: 'CarteDeCredit.API'
 
       - job: BuildMVC
         displayName: "Build MVC Application"
@@ -47,6 +96,20 @@ stages:
               command: 'build'
               projects: 'BanqueTardi/**/*.csproj'
 
+          - task: ArchiveFiles@2
+            displayName: "Créer le package ZIP pour MVC Application"
+            inputs:
+              includeRootFolder: false
+              archiveType: 'zip'
+              archiveFile: 'BanqueTardi.zip'
+              replaceExistingArchive: true
+
+          - task: PublishPipelineArtifact@1
+            displayName: "Publier l'artefact pour MVC Application"
+            inputs:
+              targetPath: 'BanqueTardi.zip'
+              artifact: 'BanqueTardi'
+
   - stage: DeployDev
     displayName: "Deploy to Development"
     dependsOn: Build
@@ -57,39 +120,57 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Interet API"
+            inputs:
+              artifact: 'CalculInterets.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Interet"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-apiinteret-dev'
-              package: '$(System.DefaultWorkingDirectory)/CalculInterets.API/**/*.zip'
+              appName: 'webapp-api-interet-dev'
+              package: '$(Pipeline.Workspace)/CalculInterets.API.zip'
 
       - job: DeployAssuranceAPI
         displayName: "Deploy API - Assurance to Dev"
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Assurance API"
+            inputs:
+              artifact: 'Assurances.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Assurance"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-assurance'
-              package: '$(System.DefaultWorkingDirectory)/Assurances.API/**/*.zip'
+              appName: 'webapp-api-assurance-dev'
+              package: '$(Pipeline.Workspace)/Assurances.API.zip'
 
       - job: DeployCreditAPI
         displayName: "Deploy API - Credit to Dev"
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Credit API"
+            inputs:
+              artifact: 'CarteDeCredit.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Credit"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-credit'
-              package: '$(System.DefaultWorkingDirectory)/CarteDeCredit.API/**/*.zip'
+              appName: 'webapp-api-credit-dev'
+              package: '$(Pipeline.Workspace)/CarteDeCredit.API.zip'
 
       - job: DeployMVCtoDev
         displayName: "Deploy MVC to Dev"
@@ -101,57 +182,99 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour MVC Application"
+            inputs:
+              artifact: 'BanqueTardi'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy MVC Application"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-tp3'
-              package: '$(System.DefaultWorkingDirectory)/BanqueTardi/**/*.zip'
+              appName: 'webapp-mvc-dev'
+              package: '$(Pipeline.Workspace)/BanqueTardi.zip'
 
+# Stage 3: Deploy to Prod
   - stage: DeployProd
     displayName: "Deploy to Production"
     dependsOn: DeployDev
     condition: succeeded()
     jobs:
+      - job: Approval
+        displayName: "Approval Stage"
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            inputs:
+              notifyUsers: '<email@example.com>'
+              instructions: |
+                Veuillez approuver le déploiement en Production.
+              timeout: '0'
+
       - job: DeployInteretAPIProd
         displayName: "Deploy API - Interet to Prod"
+        dependsOn: Approval
+        condition: succeeded()
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Interet API"
+            inputs:
+              artifact: 'CalculInterets.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Interet"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-interet'
-              package: '$(System.DefaultWorkingDirectory)/api-interet/**/*.zip'
+              appName: 'webapp-api-interet-prod'
+              package: '$(Pipeline.Workspace)/CalculInterets.API.zip'
 
       - job: DeployAssuranceAPIProd
         displayName: "Deploy API - Assurance to Prod"
+        dependsOn: Approval
+        condition: succeeded()
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Assurance API"
+            inputs:
+              artifact: 'Assurances.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Assurance"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-assurance'
-              package: '$(System.DefaultWorkingDirectory)/api-assurance/**/*.zip'
+              appName: 'webapp-api-assurance-prod'
+              package: '$(Pipeline.Workspace)/Assurances.API.zip'
 
       - job: DeployCreditAPIProd
         displayName: "Deploy API - Credit to Prod"
+        dependsOn: Approval
+        condition: succeeded()
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour Credit API"
+            inputs:
+              artifact: 'CarteDeCredit.API'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy API - Credit"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'api-credit'
-              package: '$(System.DefaultWorkingDirectory)/api-credit/**/*.zip'
+              appName: 'webapp-api-credit-prod'
+              package: '$(Pipeline.Workspace)/CarteDeCredit.API.zip'
 
       - job: DeployMVCtoProd
         displayName: "Deploy MVC to Prod"
@@ -163,10 +286,18 @@ stages:
         pool:
           vmImage: 'windows-latest'
         steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: "Télécharger l'artefact pour MVC Application"
+            inputs:
+              artifact: 'BanqueTardi'
+              path: '$(Pipeline.Workspace)'
+
           - task: AzureWebApp@1
             displayName: "Deploy MVC Application"
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-tp3'
-              package: '$(System.DefaultWorkingDirectory)/webapp/**/*.zip'
+              appName: 'webapp-mvc-banque-prod'
+              package: '$(Pipeline.Workspace)/BanqueTardi.zip'
+
+

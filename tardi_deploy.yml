@@ -1,0 +1,172 @@
+trigger:
+  branches:
+    include:
+      - main # Déclenche le pipeline uniquement sur la branche principale.
+
+variables:
+  serviceConnection: 'SC-TP3'
+  resourceGroupName: 'rg-tp3-devops'
+  location: 'canadacentral'
+  sku: 'TP3'
+
+stages:
+  - stage: Build
+    displayName: "Build Stage"
+    jobs:
+      - job: BuildAPIs
+        displayName: "Build All APIs"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Build API - Interet"
+            inputs:
+              command: 'build'
+              projects: 'api-interet/**/*.csproj'
+          - task: DotNetCoreCLI@2
+            displayName: "Build API - Assurance"
+            inputs:
+              command: 'build'
+              projects: 'api-assurance/**/*.csproj'
+          - task: DotNetCoreCLI@2
+            displayName: "Build API - Credit"
+            inputs:
+              command: 'build'
+              projects: 'api-credit/**/*.csproj'
+
+      - job: BuildMVC
+        displayName: "Build MVC Application"
+        dependsOn: BuildAPIs
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: DotNetCoreCLI@2
+            displayName: "Build MVC Application"
+            inputs:
+              command: 'build'
+              projects: 'webapp/**/*.csproj'
+
+  - stage: DeployDev
+    displayName: "Deploy to Development"
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - job: DeployInteretAPI
+        displayName: "Deploy API - Interet to Dev"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Interet"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-interet'
+              package: '$(System.DefaultWorkingDirectory)/api-interet/**/*.zip'
+
+      - job: DeployAssuranceAPI
+        displayName: "Deploy API - Assurance to Dev"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Assurance"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-assurance'
+              package: '$(System.DefaultWorkingDirectory)/api-assurance/**/*.zip'
+
+      - job: DeployCreditAPI
+        displayName: "Deploy API - Credit to Dev"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Credit"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-credit'
+              package: '$(System.DefaultWorkingDirectory)/api-credit/**/*.zip'
+
+      - job: DeployMVCtoDev
+        displayName: "Deploy MVC to Dev"
+        dependsOn: 
+          - DeployInteretAPI
+          - DeployAssuranceAPI
+          - DeployCreditAPI
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy MVC Application"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-tp3'
+              package: '$(System.DefaultWorkingDirectory)/webapp/**/*.zip'
+
+  - stage: DeployProd
+    displayName: "Deploy to Production"
+    dependsOn: DeployDev
+    condition: succeeded()
+    jobs:
+      - job: DeployInteretAPIProd
+        displayName: "Deploy API - Interet to Prod"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Interet"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-interet'
+              package: '$(System.DefaultWorkingDirectory)/api-interet/**/*.zip'
+
+      - job: DeployAssuranceAPIProd
+        displayName: "Deploy API - Assurance to Prod"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Assurance"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-assurance'
+              package: '$(System.DefaultWorkingDirectory)/api-assurance/**/*.zip'
+
+      - job: DeployCreditAPIProd
+        displayName: "Deploy API - Credit to Prod"
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy API - Credit"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'api-credit'
+              package: '$(System.DefaultWorkingDirectory)/api-credit/**/*.zip'
+
+      - job: DeployMVCtoProd
+        displayName: "Deploy MVC to Prod"
+        dependsOn: 
+          - DeployInteretAPIProd
+          - DeployAssuranceAPIProd
+          - DeployCreditAPIProd
+        condition: succeeded()
+        pool:
+          vmImage: 'windows-latest'
+        steps:
+          - task: AzureWebApp@1
+            displayName: "Deploy MVC Application"
+            inputs:
+              azureSubscription: $(serviceConnection)
+              appType: 'webApp'
+              appName: 'webapp-tp3'
+              package: '$(System.DefaultWorkingDirectory)/webapp/**/*.zip'

@@ -5,6 +5,16 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BanqueTardi.MVC", "BanqueTardi\BanqueTardi.MVC.csproj", "{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assurances.API", "Assurances.API\Assurances.API.csproj", "{F5B25177-C82A-479F-8E60-BCB8272E08DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assurances.UnitTest", "Assurances.UnitTest\Assurances.UnitTest.csproj", "{1FE519E0-43ED-412D-AC54-0C88A3F3EE6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculInterets.API", "CalculInterets.API\CalculInterets.API.csproj", "{4E7F48A3-ED0E-4C5F-9EE7-7DA176C5F48A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculInterets.UnitTest", "CalculInterets.UnitTest\CalculInterets.UnitTest.csproj", "{A3E195F5-1DA3-4856-A488-45DCC3948607}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarteDeCredit.API", "CarteDeCredit.API\CarteDeCredit.API.csproj", "{95A06CC7-795E-46D8-A4F5-4C41CE8E290A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +25,26 @@ Global
 		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{62F51DD9-2DAE-44F9-AF30-08EF7AB2C27B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5B25177-C82A-479F-8E60-BCB8272E08DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5B25177-C82A-479F-8E60-BCB8272E08DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5B25177-C82A-479F-8E60-BCB8272E08DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5B25177-C82A-479F-8E60-BCB8272E08DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FE519E0-43ED-412D-AC54-0C88A3F3EE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FE519E0-43ED-412D-AC54-0C88A3F3EE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FE519E0-43ED-412D-AC54-0C88A3F3EE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FE519E0-43ED-412D-AC54-0C88A3F3EE6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E7F48A3-ED0E-4C5F-9EE7-7DA176C5F48A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E7F48A3-ED0E-4C5F-9EE7-7DA176C5F48A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E7F48A3-ED0E-4C5F-9EE7-7DA176C5F48A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E7F48A3-ED0E-4C5F-9EE7-7DA176C5F48A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E195F5-1DA3-4856-A488-45DCC3948607}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E195F5-1DA3-4856-A488-45DCC3948607}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E195F5-1DA3-4856-A488-45DCC3948607}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E195F5-1DA3-4856-A488-45DCC3948607}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95A06CC7-795E-46D8-A4F5-4C41CE8E290A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95A06CC7-795E-46D8-A4F5-4C41CE8E290A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95A06CC7-795E-46D8-A4F5-4C41CE8E290A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95A06CC7-795E-46D8-A4F5-4C41CE8E290A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -41,8 +41,8 @@ builder.Services.AddHttpClient<ICarteCreditServices, CarteCreditServiceProxy>(cl
 builder.Services.AddSingleton<ServiceBusHelper>(sp =>
 {
     var configuration = sp.GetRequiredService<IConfiguration>();
-    string connectionString = configuration["AzureServiceBus:ConnectionString"];
-    string queueName = configuration["AzureServiceBus:QueueName"];
+    string connectionString = configuration["ServiceBus:ConnectionString"];
+    string queueName = configuration["ServiceBus:QueueName"];
     return new ServiceBusHelper(connectionString, queueName);
 });
 

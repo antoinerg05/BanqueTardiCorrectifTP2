@@ -30,16 +30,15 @@ stages:
           - task: ArchiveFiles@2
             displayName: "Créer le package ZIP pour Interet API"
             inputs:
-              rootFolderOrFile: '$(System.ArtifactStagingDirectory)/CalculInterets.API/$(BuildConfiguration)'
               includeRootFolder: false
               archiveType: 'zip'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/CalculInterets.API.zip'
+              archiveFile: 'CalculInterets.API.zip'
               replaceExistingArchive: true
 
           - task: PublishPipelineArtifact@1
             displayName: "Publier l'artefact pour Interet API"
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/CalculInterets.API.zip'
+              targetPath: 'CalculInterets.API.zip'
               artifact: 'CalculInterets.API'
 
           # Build Assurance API

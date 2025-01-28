@@ -64,7 +64,7 @@ stages:
               appType: 'webApp'
               appName: 'api-interet'
               arguments: "--verify-no-changes --verbosity diagnostic"
-              package: '$(System.DefaultWorkingDirectory)/api-interet/**/*.zip'
+              package: '$(System.DefaultWorkingDirectory)/CalculInterets.API/**/*.zip'
 
       - job: DeployAssuranceAPI
         displayName: "Deploy API - Assurance to Dev"
@@ -77,7 +77,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'api-assurance'
-              package: '$(System.DefaultWorkingDirectory)/api-assurance/**/*.zip'
+              package: '$(System.DefaultWorkingDirectory)/Assurances.API/**/*.zip'
 
       - job: DeployCreditAPI
         displayName: "Deploy API - Credit to Dev"
@@ -90,7 +90,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'api-credit'
-              package: '$(System.DefaultWorkingDirectory)/api-credit/**/*.zip'
+              package: '$(System.DefaultWorkingDirectory)/CarteDeCredit.API/**/*.zip'
 
       - job: DeployMVCtoDev
         displayName: "Deploy MVC to Dev"
@@ -108,7 +108,7 @@ stages:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
               appName: 'webapp-tp3'
-              package: '$(System.DefaultWorkingDirectory)/webapp/**/*.zip'
+              package: '$(System.DefaultWorkingDirectory)/BanqueTardi/**/*.zip'
 
   - stage: DeployProd
     displayName: "Deploy to Production"

@@ -297,7 +297,7 @@ stages:
             inputs:
               azureSubscription: $(serviceConnection)
               appType: 'webApp'
-              appName: 'webapp-mvc-prod'
+              appName: 'webapp-mvc-banque-prod'
               package: '$(Pipeline.Workspace)/BanqueTardi.zip'
 
 
